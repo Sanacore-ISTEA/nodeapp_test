@@ -1,10 +1,7 @@
 pipeline {
   agent any
     environment{
-      DOCKERHUB_CREDENTIALS = credentials ('userDocker')
-      ServidorMaster="ServidorSSH"
-      ServidorDeploy="192.168.0.79"
-      PathDeploy="/home/to_implement"
+      DOCKERHUB_CREDENCIALS = credentials ('userDocker')
       RepoDockerHub = 'sanacoreistea'
       NameContainerApp= 'mi_pagina'
       NameImagenDockerApp = 'image_mi_pagina'
@@ -18,7 +15,7 @@ pipeline {
   
       stage('Login'){
         steps{
-          sh "echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password_stdin"
+          sh "echo $DOCKERHUB_CREDENCIALS_PSW | docker login -u $DOCKERHUB_CREDENCIALS_USR --password-stdin"
         }
       }
 
@@ -32,13 +29,13 @@ pipeline {
           script{
             def remote = [:]
             remote.name = 'dev'
-            remote.host = "${env.ServidorDeploy}"
+            remote.host = '192.168.0.79'
             remote.allowAnyHosts = true
             withCredentials([sshUserPrivateKey(credentialsId: 'sshUser-key', keyFileVariable: 'identity', passphraseVariable: '', usernameVariable: 'userName')]) {
               remote.user = userName
               remote.identityFile = identity
               //LOGIN TO REGISTRY
-              writeFile file: "login.sh", text: "echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password_stdin"
+              writeFile file: "login.sh", text: "echo $DOCKERHUB_CREDENCIALS_PSW | docker login -u $DOCKERHUB_CREDENCIALS_USR --password_stdin"
               sshScript remote: remote, script: "login.sh"
 
               // PARAR EL CONTENEDOR
@@ -50,7 +47,7 @@ pipeline {
               sshScript remote: remote, script: "rm.sh"
 
               // DEPLOTAR LA IMAGEN DOCKER
-              writeFile file: 'deploy.sh', text: "docker run -d --name ${env.NameContainerApp} -p 3000:3000 ${env.RepoDockerHub}/${env.NameImagenDockerApp}:${env.BUILD_NUMBER}"
+              writeFile file: 'deploy.sh', text: "docker run -d --name ${env.NameContainerApp} -p 4000:3000 ${env.RepoDockerHub}/${env.NameImagenDockerApp}:${env.BUILD_NUMBER}"
               sshScript remote: remote, script: "deploy.sh"
 
               // LOGOUT DE DOCKER
