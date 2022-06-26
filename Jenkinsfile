@@ -40,7 +40,7 @@ pipeline {
               sshScript remote: remote, script: "login.sh"
 
               // PARAR EL CONTENEDOR
-              writeFile file: "login.sh", text: "#!/bin/sh \n docker stop ${env.NameContainerApp} \n exit 0"
+              writeFile file: "stop.sh", text: "#!/bin/sh \n docker stop ${env.NameContainerApp} \n exit 0"
               sshScript remote: remote, script: "stop.sh"              
               
               // BORRAR EL CONTENEDOR
