@@ -6,8 +6,8 @@ pipeline {
       ServidorDeploy="192.168.0.79"
       PathDeploy="/home/to_implement"
       RepoDockerHub = 'sanacoreistea'
-      NameContainerApp= 'miPagina'
-      NameImagenDockerApp = 'imagemipagina'
+      NameContainerApp= 'mi_pagina'
+      NameImagenDockerApp = 'image_mi_pagina'
   }
     stages {
       stage('Build'){
@@ -42,15 +42,15 @@ pipeline {
               sshScript remote: remote, script: "login.sh"
 
               // PARAR EL CONTENEDOR
-              writeFile file: "login.sh", text: "#!/bin/sh \n docker stop ${env.NameContainerDocker} \n exit 0"
+              writeFile file: "login.sh", text: "#!/bin/sh \n docker stop ${env.NameContainerApp} \n exit 0"
               sshScript remote: remote, script: "stop.sh"              
               
               // BORRAR EL CONTENEDOR
-              writeFile file: "rm.sh", text: "#!/bin/sh \n docker rm ${env.NameContainerDocker} \n exit 0"
+              writeFile file: "rm.sh", text: "#!/bin/sh \n docker rm ${env.NameContainerApp} \n exit 0"
               sshScript remote: remote, script: "rm.sh"
 
               // DEPLOTAR LA IMAGEN DOCKER
-              writeFile file: 'deploy.sh', text: "docker run -d --name ${env.NameContainerDocker} -p 3000:3000 ${env.RootDockerHub}/nodeapp"
+              writeFile file: 'deploy.sh', text: "docker run -d --name ${env.NameContainerApp} -p 3000:3000 ${env.RepoDockerHub}/${env.NameImagenDockerApp}:${env.BUILD_NUMBER}"
               sshScript remote: remote, script: "deploy.sh"
 
               // LOGOUT DE DOCKER
