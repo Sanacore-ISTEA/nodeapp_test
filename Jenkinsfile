@@ -7,7 +7,7 @@ pipeline {
       PathDeploy="/home/to_implement"
       RepoDockerHub = 'sanacoreistea'
       NameContainerApp= 'miPagina'
-      NameImagenDockerApp = 'imageMipagina'
+      NameImagenDockerApp = 'imagemipagina'
   }
     stages {
       stage('Build'){
