@@ -35,7 +35,7 @@ pipeline {
               remote.user = userName
               remote.identityFile = identity
               //LOGIN TO REGISTRY
-              writeFile file: "login.sh", text: "echo ${DOCKERHUB_CREDENCIALS_PSW} | docker login -u $DOCKERHUB_CREDENCIALS_USR --password_stdin"
+              writeFile file: "login.sh", text: "echo $DOCKERHUB_CREDENCIALS_PSW | docker login -u $DOCKERHUB_CREDENCIALS_USR --password_stdin"
               sshScript remote: remote, script: "login.sh"
 
               // PARAR EL CONTENEDOR
