@@ -15,7 +15,7 @@ pipeline {
   
       stage('Login'){
         steps{
-          sh "echo $DOCKERHUB_CREDENCIALS_PSW | docker login -u $DOCKERHUB_CREDENCIALS_USR --password-stdin"
+          sh "echo C4t4l1n4! | docker login -u sanacoreistea --password-stdin"
         }
       }
 
@@ -34,8 +34,9 @@ pipeline {
             withCredentials([sshUserPrivateKey(credentialsId: 'sshUser-key', keyFileVariable: 'identity', passphraseVariable: '', usernameVariable: 'userName')]) {
               remote.user = userName
               remote.identityFile = identity
+              
               //LOGIN TO REGISTRY
-              writeFile file: "login.sh", text: "echo $DOCKERHUB_CREDENCIALS_PSW | docker login -u $DOCKERHUB_CREDENCIALS_USR --password_stdin"
+              writeFile file: "login.sh", text: "echo C4t4l1n4! | docker login -u sanacoreistea --password-stdin"
               sshScript remote: remote, script: "login.sh"
 
               // PARAR EL CONTENEDOR
