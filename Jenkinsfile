@@ -24,12 +24,12 @@ pipeline {
           sh "docker push ${env.RepoDockerHub}/${env.NameImagenDockerApp}:${env.BUILD_NUMBER}"
         }
       }
-      stage('Deploy to server'){
+      stage('Deploy to dev'){
         steps{
           script{
             def remote = [:]
-            remote.name = 'dev'
-            remote.host = '192.168.0.79'
+            remote.name = 'Dev'
+            remote.host = '192.168.0.197'
             remote.allowAnyHosts = true
             withCredentials([sshUserPrivateKey(credentialsId: 'sshUser-key', keyFileVariable: 'identity', passphraseVariable: '', usernameVariable: 'userName')]) {
               remote.user = userName
